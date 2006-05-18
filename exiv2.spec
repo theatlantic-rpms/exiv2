@@ -1,5 +1,5 @@
 
-Summary: Exif and Iptc metadata manipulation library and tools
+Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.9.1
 Release: 3%{?dist} 
@@ -12,7 +12,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: exiv2-0.9.1-no_rpath.patch
 Patch2: exiv2-0.9.1-deps.patch
-
 
 
 %description
