@@ -1,0 +1,13 @@
+--- exiv2-0.9.1/src/Makefile.deps	2006-01-20 02:45:59.000000000 -0600
++++ exiv2-0.9.1/src/Makefile	2006-05-18 09:10:11.000000000 -0500
+@@ -156,6 +156,10 @@
+ 	@$(LIBTOOL) --mode=compile $(COMPILE.cc) -o $@ $<
+ 	@$(MAKEDEPEND)
+ 	@$(POSTDEPEND)
++# The dependancies here are wrong.  It generates .lo output,
++# so things are rebuilt *every* time 'make' is called.  
++# Let's try a quick-n-dirty hack -- Rex
++	touch $@
+ 
+ $(COBJ): %.o: %.c
+ 	@$(LIBTOOL) --mode=compile $(COMPILE.c) -o $@ $<
