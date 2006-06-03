@@ -1,13 +1,13 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.9.1
-Release: 3%{?dist} 
+Version: 0.10
+Release: 1%{?dist} 
 
 License: GPL
 Group:	 Applications/Multimedia
-URL: 	 http://home.arcor.de/ahuggel/exiv2/
-Source:	 http://home.arcor.de/ahuggel/exiv2/exiv2-%{version}.tar.gz
+URL: 	 http://www.exiv2.org/
+Source:	 http://www.exiv2.org/exiv2-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: exiv2-0.9.1-no_rpath.patch
@@ -34,6 +34,7 @@ The command line utility allows you to:
 Summary: Header files, libraries and development documentation for %{name}
 Group:	 Development/Libraries
 Requires: %{name} = %{version}-%{release}
+Requires: pkgconfig
 %description devel
 %{summary}.
 
@@ -62,6 +63,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 # set eXecute bit on installed lib
 chmod a+x $RPM_BUILD_ROOT%{_libdir}/libexiv2-*.so
 
+## FIXME/TODO: patch installed exiv2-config to instead pull values from pkgconfig
+
 
 %clean
 rm -rf $FPM_BUILD_ROOT
@@ -85,9 +88,13 @@ rm -rf $FPM_BUILD_ROOT
 %{_bindir}/exiv2-config
 %{_includedir}/exiv2/
 %{_libdir}/libexiv2.so
+%{_libdir}/pkgconfig/exiv2.pc
 
 
 %changelog
+* Sat Jun 03 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.10-1
+- 0.10
+
 * Wed May 17 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.9.1-3
 - cleanup %%description
 - set eXecute bit on installed lib.
