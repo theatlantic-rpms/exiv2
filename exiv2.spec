@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.10
-Release: 1%{?dist} 
+Release: 2%{?dist} 
 
 License: GPL
 Group:	 Applications/Multimedia
@@ -92,6 +92,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 29 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.10-2
+- fc6 respin
+
 * Sat Jun 03 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.10-1
 - 0.10
 
