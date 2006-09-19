@@ -2,13 +2,15 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.11
-Release: 1%{?dist} 
+Release: 2%{?dist} 
 
 License: GPL
 Group:	 Applications/Multimedia
 URL: 	 http://www.exiv2.org/
 Source0: http://www.exiv2.org/exiv2-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+BuildRequires: zlib-devel
 
 Patch1: exiv2-0.11-no_rpath.patch
 Patch2: exiv2-0.9.1-deps.patch
@@ -94,6 +96,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Tue Sep 19 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.11-2
+- BR: zlib-devel
+
 * Tue Sep 19 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.11-1
 - 0.11
 
