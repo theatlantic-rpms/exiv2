@@ -1,12 +1,10 @@
 --- exiv2-0.11/config/exiv2.pc.in.pkgconfig	2006-06-15 02:27:50.000000000 -0500
-+++ exiv2-0.11/config/exiv2.pc.in	2006-09-19 13:54:00.000000000 -0500
-@@ -6,6 +6,7 @@
- Name: exiv2
++++ exiv2-0.11/config/exiv2.pc.in	2006-10-02 09:32:32.000000000 -0500
+@@ -7,5 +7,6 @@
  Description: Exif and IPTC metadata library and tools
  Version: @PACKAGE_VERSION@
--URL: http://www.exiv2.org
+ URL: http://www.exiv2.org
 -Libs: -L${libdir} -lexiv2 @LIBS@
-+#URL: http://www.exiv2.org
 +Libs: -L${libdir} -lexiv2
 +Libs.private: @LIBS@
  Cflags: -I${includedir}

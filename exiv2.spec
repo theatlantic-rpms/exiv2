@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.11
-Release: 2%{?dist} 
+Release: 3%{?dist} 
 
 License: GPL
 Group:	 Applications/Multimedia
@@ -14,6 +14,7 @@ BuildRequires: zlib-devel
 
 Patch1: exiv2-0.11-no_rpath.patch
 Patch2: exiv2-0.9.1-deps.patch
+# http://dev.robotbattle.com/bugs/view.php?id=489
 Patch3: exiv2-0.11-pkgconfig.patch
 
 
@@ -96,6 +97,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct 04 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.11-3
+- respin
+
 * Tue Sep 19 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.11-2
 - BR: zlib-devel
 
