@@ -1,7 +1,7 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.12
+Version: 0.14
 Release: 1%{?dist} 
 
 License: GPL
@@ -11,6 +11,9 @@ Source0: http://www.exiv2.org/exiv2-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: zlib-devel
+BuildRequires: gettext
+# docs
+BuildRequires: doxygen graphviz libxslt
 
 Patch1: exiv2-0.11-no_rpath.patch
 Patch2: exiv2-0.9.1-deps.patch
@@ -47,25 +50,27 @@ Requires: pkgconfig
 %patch1 -p1 -b .no_rpath
 %patch2 -p1 -b .deps
 
+mkdir doc/html
+
 
 %build
 %configure --disable-static 
 
-make -C src %{?_smp_mflags} 
+make %{?_smp_mflags} 
 
 
 %install
 rm -rf $RPM_BUILD_ROOT 
 
-make -C src install DESTDIR=$RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
+
+%find_lang exiv2
 
 # Unpackaged files
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 
 # set eXecute bit on installed lib
-chmod a+x $RPM_BUILD_ROOT%{_libdir}/libexiv2-*.so
-
-## FIXME/TODO: patch installed exiv2-config to instead pull values from pkgconfig
+chmod a+x $RPM_BUILD_ROOT%{_libdir}/libexiv2*.so
 
 
 %clean
@@ -77,23 +82,25 @@ rm -rf $FPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 
-%files
+%files -f exiv2.lang
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
-%{_libdir}/libexiv2-*.so
+%{_libdir}/libexiv2.so.*
 %{_mandir}/man1/*
 
 %files devel
 %defattr(-,root,root,-)
 %doc doc/html
-%{_bindir}/exiv2-config
 %{_includedir}/exiv2/
 %{_libdir}/libexiv2.so
 %{_libdir}/pkgconfig/exiv2.pc
 
 
 %changelog
+* Mon Apr 02 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.14-1
+- exiv2-0.14
+
 * Tue Nov 28 2006 Rex Dieter <rexdieter[AT]users.sf.net> 0.12-1
 - exiv2-0.12
 
