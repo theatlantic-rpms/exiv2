@@ -1,7 +1,7 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.14
+Version: 0.15
 Release: 1%{?dist} 
 
 License: GPL
@@ -98,6 +98,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jul 12 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-1
+- exiv2-0.15
+
 * Mon Apr 02 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.14-1
 - exiv2-0.14
 
