@@ -2,9 +2,9 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.15
-Release: 1%{?dist} 
+Release: 2%{?dist} 
 
-License: GPL
+License: GPLv2+
 Group:	 Applications/Multimedia
 URL: 	 http://www.exiv2.org/
 Source0: http://www.exiv2.org/exiv2-%{version}.tar.gz
@@ -98,6 +98,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Sat Aug 11 2007 Rex Dieter <rdieter[AT]fedoraprojectg.org> 0.15-2
+- License: GPLv2+
+
 * Thu Jul 12 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-1
 - exiv2-0.15
 
