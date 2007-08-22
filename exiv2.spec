@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.15
-Release: 2%{?dist} 
+Release: 3%{?dist} 
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -18,13 +18,10 @@ BuildRequires: doxygen graphviz libxslt
 Patch1: exiv2-0.11-no_rpath.patch
 Patch2: exiv2-0.9.1-deps.patch
 
+Requires: %{name}-libs = %{version}-%{release}
 
 %description
-Exiv2 comprises of a C++ library and a command line utility to access image
-metadata. Exiv2 supports full read and write access to the Exif and Iptc
-metadata, Exif MakerNote support, extract and delete methods for Exif
-thumbnails, classes to access Ifd and so on.
-The command line utility allows you to:
+A command line utility to access image metadata, allowing one to:
 * print the Exif metadata of Jpeg images as summary info, interpreted values,
   or the plain data for each tag
 * print the Iptc metadata of Jpeg images
@@ -38,10 +35,20 @@ The command line utility allows you to:
 %package devel
 Summary: Header files, libraries and development documentation for %{name}
 Group:	 Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}-libs = %{version}-%{release}
 Requires: pkgconfig
 %description devel
 %{summary}.
+
+%package libs
+Summary: Exif and Iptc metadata manipulation library
+Group: System Environment/Libraries
+# not *strictly* required, but runtime may expect presence of exiv2 binary
+Requires: %{name} = %{version}-%{release}
+%description libs
+A C++ library to access image metadata, supporting full read and write access
+to the Exif and Iptc metadata, Exif MakerNote support, extract and delete 
+methods for Exif thumbnails, classes to access Ifd and so on.
 
 
 %prep
@@ -69,8 +76,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # Unpackaged files
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 
-# set eXecute bit on installed lib
-chmod a+x $RPM_BUILD_ROOT%{_libdir}/libexiv2*.so
+# fix perms on installed lib
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/lib*.so*
 
 
 %clean
@@ -82,12 +89,15 @@ rm -rf $FPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 
-%files -f exiv2.lang
+%files 
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
-%{_libdir}/libexiv2.so.*
 %{_mandir}/man1/*
+
+%files libs -f exiv2.lang
+%defattr(-,root,root,-)
+%{_libdir}/libexiv2.so.*
 
 %files devel
 %defattr(-,root,root,-)
@@ -98,7 +108,10 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
-* Sat Aug 11 2007 Rex Dieter <rdieter[AT]fedoraprojectg.org> 0.15-2
+* Tue Aug 21 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-3
+- -libs subpkg to be multilib-friendlier
+
+* Sat Aug 11 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-2
 - License: GPLv2+
 
 * Thu Jul 12 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-1
