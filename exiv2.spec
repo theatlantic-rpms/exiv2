@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.15
-Release: 3%{?dist} 
+Release: 4%{?dist} 
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -44,7 +44,8 @@ Requires: pkgconfig
 Summary: Exif and Iptc metadata manipulation library
 Group: System Environment/Libraries
 # not *strictly* required, but runtime may expect presence of exiv2 binary
-Requires: %{name} = %{version}-%{release}
+# we'll try removing it, and see... -- Rex
+#Requires: %{name} = %{version}-%{release}
 %description libs
 A C++ library to access image metadata, supporting full read and write access
 to the Exif and Iptc metadata, Exif MakerNote support, extract and delete 
@@ -108,6 +109,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Tue Sep 18 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-4
+- -libs: -Requires: %%name
+
 * Tue Aug 21 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-3
 - -libs subpkg to be multilib-friendlier
 
