@@ -1,21 +1,24 @@
 
+%define pre pre1
+
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.15
-Release: 4%{?dist} 
+Version: 0.16
+Release: 0.1.%{?pre}%{?dist} 
 
 License: GPLv2+
 Group:	 Applications/Multimedia
 URL: 	 http://www.exiv2.org/
-Source0: http://www.exiv2.org/exiv2-%{version}.tar.gz
+Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: zlib-devel
+BuildRequires: chrpath
+BuildRequires: expat-devel
 BuildRequires: gettext
+BuildRequires: zlib-devel
 # docs
-BuildRequires: doxygen graphviz libxslt
+#BuildRequires: doxygen graphviz libxslt
 
-Patch1: exiv2-0.11-no_rpath.patch
 Patch2: exiv2-0.9.1-deps.patch
 
 Requires: %{name}-libs = %{version}-%{release}
@@ -53,41 +56,45 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
-%patch1 -p1 -b .no_rpath
 %patch2 -p1 -b .deps
 
 mkdir doc/html
 
 
 %build
-%configure --disable-static 
+%configure \
+  --disable-rpath \
+  --disable-static 
 
 make %{?_smp_mflags} 
 
 
 %install
-rm -rf $RPM_BUILD_ROOT 
+rm -rf %{buildroot} 
 
-make install DESTDIR=$RPM_BUILD_ROOT
+make install DESTDIR=%{buildroot}
 
 %find_lang exiv2
 
 # Unpackaged files
-rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
+rm -f %{buildroot}%{_libdir}/lib*.la
 
 # fix perms on installed lib
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/lib*.so*
+chmod 755 %{buildroot}%{_libdir}/lib*.so*
 
+# nuke rpaths
+chrpath --list %{buildroot}%{_bindir}/exiv2
+chrpath --delete %{buildroot}%{_bindir}/exiv2
 
 %clean
-rm -rf $FPM_BUILD_ROOT
+rm -rf %{buildroot} 
 
 
-%post -p /sbin/ldconfig
+%post libs -p /sbin/ldconfig
 
-%postun -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 
 %files 
@@ -109,6 +116,9 @@ rm -rf $FPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 13 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-0.1.pre1
+- exiv2-0.16-pre1
+
 * Tue Sep 18 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-4
 - -libs: -Requires: %%name
 
