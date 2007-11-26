@@ -1,10 +1,15 @@
 
 %define pre pre1
 
+%if 0%{?fedora} > 7
+# make -libs subpkg
+%define libs 1
+%endif
+
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.16
-Release: 0.1.%{?pre}%{?dist} 
+Release: 0.2.%{?pre}%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -21,7 +26,13 @@ BuildRequires: zlib-devel
 
 Patch2: exiv2-0.9.1-deps.patch
 
+%if 0%{?libs}
 Requires: %{name}-libs = %{version}-%{release}
+%else
+Obsoletes: %{name}-libs < %{version}-%{release}
+Provides:  %{name}-libs = %{version}-%{release}
+%endif
+
 
 %description
 A command line utility to access image metadata, allowing one to:
@@ -43,9 +54,12 @@ Requires: pkgconfig
 %description devel
 %{summary}.
 
+%if 0%{?libs}
 %package libs
 Summary: Exif and Iptc metadata manipulation library
 Group: System Environment/Libraries
+# helps multilib upgrades
+# Obsoletes: %{name} < %{version}-%{release}
 # not *strictly* required, but runtime may expect presence of exiv2 binary
 # we'll try removing it, and see... -- Rex
 #Requires: %{name} = %{version}-%{release}
@@ -53,6 +67,7 @@ Group: System Environment/Libraries
 A C++ library to access image metadata, supporting full read and write access
 to the Exif and Iptc metadata, Exif MakerNote support, extract and delete 
 methods for Exif thumbnails, classes to access Ifd and so on.
+%endif
 
 
 %prep
@@ -66,7 +81,7 @@ mkdir doc/html
 %build
 %configure \
   --disable-rpath \
-  --disable-static 
+  --disable-static
 
 make %{?_smp_mflags} 
 
@@ -85,26 +100,29 @@ rm -f %{buildroot}%{_libdir}/lib*.la
 chmod 755 %{buildroot}%{_libdir}/lib*.so*
 
 # nuke rpaths
-chrpath --list %{buildroot}%{_bindir}/exiv2
+chrpath --list   %{buildroot}%{_bindir}/exiv2
 chrpath --delete %{buildroot}%{_bindir}/exiv2
+
 
 %clean
 rm -rf %{buildroot} 
 
 
-%post libs -p /sbin/ldconfig
+%post %{?libs:libs} -p /sbin/ldconfig
 
-%postun libs -p /sbin/ldconfig
+%postun %{?libs:libs} -p /sbin/ldconfig
 
 
-%files 
+%files %{!?libs:-f exiv2.lang} 
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
 %{_mandir}/man1/*
 
+%if 0%{?libs}
 %files libs -f exiv2.lang
 %defattr(-,root,root,-)
+%endif
 %{_libdir}/libexiv2.so.*
 
 %files devel
@@ -116,6 +134,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Nov 26 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-0.2.pre1
+- -libs subpkg toggle (f8+)
+
 * Tue Nov 13 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-0.1.pre1
 - exiv2-0.16-pre1
 
@@ -123,7 +144,7 @@ rm -rf %{buildroot}
 - -libs: -Requires: %%name
 
 * Tue Aug 21 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-3
-- -libs subpkg to be multilib-friendlier
+- -libs subpkg to be multilib-friendlier (f8+)
 
 * Sat Aug 11 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.15-2
 - License: GPLv2+
