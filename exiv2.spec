@@ -137,7 +137,7 @@ rm -rf %{buildroot}
 
 %changelog
 * Mon Dec 17 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-0.3.pre1
-- CVE-2007-6353 (#425921, #425924)
+- CVE-2007-6353 (#425924)
 
 * Mon Nov 26 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-0.2.pre1
 - -libs subpkg toggle (f8+)
