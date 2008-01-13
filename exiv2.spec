@@ -1,6 +1,4 @@
 
-%define pre pre1
-
 %if 0%{?fedora} > 7
 # make -libs subpkg
 %define libs 1
@@ -9,7 +7,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.16
-Release: 0.3.%{?pre}%{?dist}
+Release: 1%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -24,8 +22,7 @@ BuildRequires: zlib-devel
 # docs
 #BuildRequires: doxygen graphviz libxslt
 
-Patch2: exiv2-0.9.1-deps.patch
-Patch3: exiv-0.16-CVE-2007-6353.patch
+Patch1: exiv2-0.9.1-deps.patch
 
 %if 0%{?libs}
 Requires: %{name}-libs = %{version}-%{release}
@@ -74,8 +71,7 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
-%patch2 -p1 -b .deps
-%patch3 -p1 -b .CVE-2007-6353
+%patch1 -p1 -b .deps
 
 mkdir doc/html
 
@@ -136,6 +132,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Jan 13 2008 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-1
+- eviv2-0.16
+
 * Mon Dec 17 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-0.3.pre1
 - CVE-2007-6353 (#425924)
 
