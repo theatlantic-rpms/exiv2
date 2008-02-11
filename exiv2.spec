@@ -23,6 +23,7 @@ BuildRequires: zlib-devel
 #BuildRequires: doxygen graphviz libxslt
 
 Patch1: exiv2-0.9.1-deps.patch
+Patch2: exiv2-0.16-gcc43.patch
 
 %if 0%{?libs}
 Requires: %{name}-libs = %{version}-%{release}
@@ -72,6 +73,7 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
 %patch1 -p1 -b .deps
+%patch2 -p1 -b .gcc43
 
 mkdir doc/html
 
@@ -134,6 +136,7 @@ rm -rf %{buildroot}
 %changelog
 * Mon Feb 11 2008 Rex Dieter <rdieter@fedoraproject.org> 0.16-2
 - respin (gcc43)
+- gcc43 patch
 
 * Sun Jan 13 2008 Rex Dieter <rdieter[AT]fedoraproject.org> 0.16-1
 - eviv2-0.16
