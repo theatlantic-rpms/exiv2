@@ -16,7 +16,7 @@ diff -up exiv2-0.16/xmpsdk/src/XMPMeta-Serialize.cpp.gcc43 exiv2-0.16/xmpsdk/src
  	#include <iostream>
  #endif
  
-+#include <string.h>
++#include <cstring>
 +
  using namespace std;
  
@@ -31,7 +31,7 @@ diff -up exiv2-0.16/xmpsdk/src/XMPMeta.cpp.gcc43 exiv2-0.16/xmpsdk/src/XMPMeta.c
  	#include <iostream>
  #endif
  
-+#include <string.h>
++#include <cstring>
 +
  using namespace std;
  
@@ -43,7 +43,7 @@ diff -up exiv2-0.16/xmpsdk/src/XMPMeta-GetSet.cpp.gcc43 exiv2-0.16/xmpsdk/src/XM
  	#include <iostream>
  #endif
  
-+#include <string.h>
++#include <cstring>
 +
  using namespace std;
  
@@ -55,7 +55,7 @@ diff -up exiv2-0.16/xmpsdk/src/XMPMeta-Parse.cpp.gcc43 exiv2-0.16/xmpsdk/src/XMP
  	#include <iostream>
  #endif
  
-+#include <string.h>
++#include <cstring>
 +
  using namespace std;
  
