@@ -7,7 +7,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.17.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -18,6 +18,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: chrpath
 BuildRequires: expat-devel
 BuildRequires: gettext
+BuildRequires: pkgconfig
 BuildRequires: zlib-devel
 # docs
 #BuildRequires: doxygen graphviz libxslt
@@ -57,11 +58,6 @@ Requires: pkgconfig
 %package libs
 Summary: Exif and Iptc metadata manipulation library
 Group: System Environment/Libraries
-# helps multilib upgrades
-# Obsoletes: %{name} < %{version}-%{release}
-# not *strictly* required, but runtime may expect presence of exiv2 binary
-# we'll try removing it, and see... -- Rex
-#Requires: %{name} = %{version}-%{release}
 %description libs
 A C++ library to access image metadata, supporting full read and write access
 to the Exif and Iptc metadata, Exif MakerNote support, extract and delete 
@@ -134,6 +130,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Dec 12 2008 Rex Dieter <rdieter@fedoraproject.org> 0.17.2-2
+- rebuild for pkgconfig deps
+
 * Mon Jun 23 2008 Rex Dieter <rdieter@fedoraproject.org> 0.17.1-1
 - exiv2-0.17.1
 
