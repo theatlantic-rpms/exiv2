@@ -6,8 +6,8 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.17.1
-Release: 2%{?dist}
+Version: 0.18
+Release: 1%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -23,7 +23,7 @@ BuildRequires: zlib-devel
 # docs
 #BuildRequires: doxygen graphviz libxslt
 
-Patch1: exiv2-0.9.1-deps.patch
+Patch1: exiv2-0.18-deps.patch
 Patch2: exiv2-0.16-gcc43.patch
 
 %if 0%{?libs}
@@ -69,7 +69,7 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
 %patch1 -p1 -b .deps
-%patch2 -p1 -b .gcc43
+#patch2 -p1 -b .gcc43
 
 mkdir doc/html
 
@@ -119,7 +119,7 @@ rm -rf %{buildroot}
 %files libs -f exiv2.lang
 %defattr(-,root,root,-)
 %endif
-%{_libdir}/libexiv2.so.4*
+%{_libdir}/libexiv2.so.5*
 
 %files devel
 %defattr(-,root,root,-)
@@ -130,6 +130,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Dec 18 2008 Rex Dieter <rdieter@fedoraproject.org> 0.18-1
+- exiv2-0.18
+
 * Fri Dec 12 2008 Rex Dieter <rdieter@fedoraproject.org> 0.17.2-2
 - rebuild for pkgconfig deps
 
