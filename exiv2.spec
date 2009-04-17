@@ -6,8 +6,8 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.18
-Release: 2%{?dist}
+Version: 0.18.1
+Release: 1%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -24,7 +24,7 @@ BuildRequires: zlib-devel
 #BuildRequires: doxygen graphviz libxslt
 
 Patch1: exiv2-0.18-deps.patch
-Patch2: exiv2-0.16-gcc43.patch
+Patch2: exiv2-0.18.1-visibility.patch
 
 %if 0%{?libs}
 Requires: %{name}-libs = %{version}-%{release}
@@ -69,7 +69,7 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
 %patch1 -p1 -b .deps
-#patch2 -p1 -b .gcc43
+%patch2 -p1 -b .visibility
 
 mkdir doc/html
 
@@ -77,7 +77,7 @@ mkdir doc/html
 %build
 %configure \
   --disable-rpath \
-  --disable-static
+  --disable-static 
 
 make %{?_smp_mflags} 
 
@@ -130,6 +130,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Apr 17 2009 Rex Dieter <rdieter@fedoraproject.org> - 0.18.1-1
+- exiv2-0.18.1
+- drop -fvisibility-inlines-hidden (#496050)
+
 * Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.18-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
