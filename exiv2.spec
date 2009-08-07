@@ -7,7 +7,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.18.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -70,7 +70,7 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 
 %patch1 -p1 -b .deps
 ## drop for now, seems no longer needed as of 0.18.2
-#patch2 -p1 -b .visibility
+%patch2 -p1 -b .visibility
 
 mkdir doc/html
 
@@ -131,6 +131,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Aug 07 2009 Rex Dieter <rdieter@fedoraproject.org> - 0.18.2-2
+- (again) drop -fvisibility-inlines-hidden (#496050)
+
 * Fri Jul 24 2009 Rex Dieter <rdieter@fedoraproject.org> - 0.18.2-1
 - exiv2-0.18.2
 - drop visibility patch
