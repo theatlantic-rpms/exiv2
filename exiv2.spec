@@ -1,13 +1,8 @@
 
-%if 0%{?fedora} > 7
-# make -libs subpkg
-%define libs 1
-%endif
-
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.18.2
-Release: 2%{?dist}
+Version: 0.19
+Release: 1%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -24,14 +19,8 @@ BuildRequires: zlib-devel
 #BuildRequires: doxygen graphviz libxslt
 
 Patch1: exiv2-0.18-deps.patch
-Patch2: exiv2-0.18.1-visibility.patch
 
-%if 0%{?libs}
-Requires: %{name}-libs = %{version}-%{release}
-%else
-Obsoletes: %{name}-libs < %{version}-%{release}
-Provides:  %{name}-libs = %{version}-%{release}
-%endif
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 
 %description
@@ -49,12 +38,11 @@ A command line utility to access image metadata, allowing one to:
 %package devel
 Summary: Header files, libraries and development documentation for %{name}
 Group:	 Development/Libraries
-Requires: %{name}-libs = %{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
 %description devel
 %{summary}.
 
-%if 0%{?libs}
 %package libs
 Summary: Exif and Iptc metadata manipulation library
 Group: System Environment/Libraries
@@ -62,17 +50,18 @@ Group: System Environment/Libraries
 A C++ library to access image metadata, supporting full read and write access
 to the Exif and Iptc metadata, Exif MakerNote support, extract and delete 
 methods for Exif thumbnails, classes to access Ifd and so on.
-%endif
 
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
 %patch1 -p1 -b .deps
-## drop for now, seems no longer needed as of 0.18.2
-%patch2 -p1 -b .visibility
 
 mkdir doc/html
+
+%if "%{_libdir}" != "/usr/lib"
+sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
+%endif
 
 
 %build
@@ -105,22 +94,20 @@ chrpath --delete %{buildroot}%{_bindir}/exiv2
 rm -rf %{buildroot} 
 
 
-%post %{?libs:libs} -p /sbin/ldconfig
+%post -p /sbin/ldconfig
 
-%postun %{?libs:libs} -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 
-%files %{!?libs:-f exiv2.lang} 
+%files
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
 %{_mandir}/man1/*
 
-%if 0%{?libs}
 %files libs -f exiv2.lang
 %defattr(-,root,root,-)
-%endif
-%{_libdir}/libexiv2.so.5*
+%{_libdir}/libexiv2.so.6*
 
 %files devel
 %defattr(-,root,root,-)
@@ -131,6 +118,13 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Dec 30 2009 Rex Dieter <rdieter@fedoraproject.org> - 0.19-1
+- exiv2-0.19 (#552275)
+
+* Sun Dec 13 2009 Rex Dieter <rdieter@fedoraproject.org> - 0.18.2-3
+- -libs unconditional
+- tighten deps using %%?_isa
+
 * Fri Aug 07 2009 Rex Dieter <rdieter@fedoraproject.org> - 0.18.2-2
 - (again) drop -fvisibility-inlines-hidden (#496050)
 
