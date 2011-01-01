@@ -1,7 +1,7 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.20
+Version: 0.21
 Release: 1%{?dist}
 
 License: GPLv2+
@@ -17,8 +17,6 @@ BuildRequires: pkgconfig
 BuildRequires: zlib-devel
 # docs
 #BuildRequires: doxygen graphviz libxslt
-
-Patch1: exiv2-0.20-deps.patch
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
@@ -55,8 +53,6 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
-%patch1 -p1 -b .deps
-
 mkdir doc/html
 
 
@@ -76,10 +72,10 @@ make install DESTDIR=%{buildroot}
 %find_lang exiv2
 
 ## Unpackaged files
-rm -f %{buildroot}%{_libdir}/lib*.la
+rm -fv %{buildroot}%{_libdir}/libexiv2.la
 
 ## fix perms on installed lib
-chmod 755 %{buildroot}%{_libdir}/lib*.so*
+chmod 755 %{buildroot}%{_libdir}/libexiv2.so.*
 
 ## nuke rpaths
 chrpath --list   %{buildroot}%{_bindir}/exiv2 && \
@@ -108,7 +104,7 @@ rm -rf %{buildroot}
 
 %files libs -f exiv2.lang
 %defattr(-,root,root,-)
-%{_libdir}/libexiv2.so.9*
+%{_libdir}/libexiv2.so.10*
 
 %files devel
 %defattr(-,root,root,-)
@@ -119,6 +115,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Dec 01 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.21-1
+- exiv2-0.21
+
 * Sun May 30 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.20-1
 - exiv2-0.20
 
