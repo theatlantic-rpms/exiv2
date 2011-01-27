@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.21
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -91,9 +91,9 @@ test "$(pkg-config --modversion exiv2)" = "%{version}"
 rm -rf %{buildroot} 
 
 
-%post -p /sbin/ldconfig
+%post libs -p /sbin/ldconfig
 
-%postun -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 
 %files
@@ -115,6 +115,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Jan 26 2011 Rex Dieter <rdieter@fedoraproject.org> 0.21-2
+- Move ldconfig scriptlet calls to -libs (#672361)
+
 * Wed Dec 01 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.21-1
 - exiv2-0.21
 
