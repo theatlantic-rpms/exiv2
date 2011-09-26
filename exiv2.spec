@@ -2,13 +2,17 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.21.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
 URL: 	 http://www.exiv2.org/
 Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+## upstream patches
+# http://dev.exiv2.org/issues/769
+Patch100: exiv2-0.21.1-tiffcomposite.patch
 
 BuildRequires: chrpath
 BuildRequires: expat-devel
@@ -52,6 +56,10 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
+
+pushd src
+%patch100 -p0 -b .tiffcomposite
+popd
 
 mkdir doc/html
 
@@ -116,6 +124,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Sep 26 2011 Rex Dieter <rdieter@fedoraproject.org> 0.21.1-2
+- gthumb crashes because of bug in exiv2 0.21.1 (#741429)
+
 * Sat Feb 26 2011 Rex Dieter <rdieter@fedoraproject.org> 0.21.1-1
 - exiv2-0.21.1
 
