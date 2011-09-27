@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.21.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -13,6 +13,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 ## upstream patches
 # http://dev.exiv2.org/issues/769
 Patch100: exiv2-0.21.1-tiffcomposite.patch
+# http://dev.exiv2.org/issues/772
+Patch101: http://dev.exiv2.org/attachments/download/258/exiv2-0.21-Tamron70-300.patch
 
 BuildRequires: chrpath
 BuildRequires: expat-devel
@@ -60,6 +62,7 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 pushd src
 %patch100 -p0 -b .tiffcomposite
 popd
+%patch101 -p1 -b .Tamron70-300
 
 mkdir doc/html
 
@@ -124,6 +127,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Sep 27 2011 Rex Dieter <rdieter@fedoraproject.org> 0.21.1-3
+- New Tamron 70-300 mm lens improperly recognized (#708403)
+
 * Mon Sep 26 2011 Rex Dieter <rdieter@fedoraproject.org> 0.21.1-2
 - gthumb crashes because of bug in exiv2 0.21.1 (#741429)
 
