@@ -1,8 +1,8 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.21.1
-Release: 3%{?dist}
+Version: 0.22
+Release: 1%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -11,10 +11,6 @@ Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 ## upstream patches
-# http://dev.exiv2.org/issues/769
-Patch100: exiv2-0.21.1-tiffcomposite.patch
-# http://dev.exiv2.org/issues/772
-Patch101: http://dev.exiv2.org/attachments/download/258/exiv2-0.21-Tamron70-300.patch
 
 BuildRequires: chrpath
 BuildRequires: expat-devel
@@ -59,11 +55,6 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
-pushd src
-%patch100 -p0 -b .tiffcomposite
-popd
-%patch101 -p1 -b .Tamron70-300
-
 mkdir doc/html
 
 
@@ -103,20 +94,18 @@ test "$(pkg-config --modversion exiv2)" = "%{version}"
 rm -rf %{buildroot} 
 
 
-%post libs -p /sbin/ldconfig
-
-%postun libs -p /sbin/ldconfig
-
-
 %files
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
 %{_mandir}/man1/*
 
+%post libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
+
 %files libs -f exiv2.lang
 %defattr(-,root,root,-)
-%{_libdir}/libexiv2.so.10*
+%{_libdir}/libexiv2.so.11*
 
 %files devel
 %defattr(-,root,root,-)
@@ -127,6 +116,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Oct 14 2011 Rex Dieter <rdieter@fedoraproject.org> 0.22-1
+- exiv2-0.22
+
 * Tue Sep 27 2011 Rex Dieter <rdieter@fedoraproject.org> 0.21.1-3
 - New Tamron 70-300 mm lens improperly recognized (#708403)
 
