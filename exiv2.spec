@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.22
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -12,7 +12,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 ## upstream patches
 
-BuildRequires: chrpath
 BuildRequires: expat-devel
 BuildRequires: gettext
 BuildRequires: pkgconfig
@@ -63,6 +62,9 @@ mkdir doc/html
   --disable-rpath \
   --disable-static 
 
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+
 make %{?_smp_mflags} 
 
 
@@ -80,10 +82,6 @@ rm -fv %{buildroot}%{_libdir}/libexiv2.la
 ls -l     %{buildroot}%{_libdir}/libexiv2.so.*
 chmod 755 %{buildroot}%{_libdir}/libexiv2.so.*
 
-## nuke rpaths
-chrpath --list   %{buildroot}%{_bindir}/exiv2 && \
-chrpath --delete %{buildroot}%{_bindir}/exiv2
-
 
 %check
 export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
@@ -94,7 +92,7 @@ test "$(pkg-config --modversion exiv2)" = "%{version}"
 rm -rf %{buildroot} 
 
 
-%files -f exiv2.lang
+%files 
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
@@ -103,7 +101,7 @@ rm -rf %{buildroot}
 %post libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
 
-%files libs
+%files libs -f exiv2.lang
 %defattr(-,root,root,-)
 %{_libdir}/libexiv2.so.11*
 
@@ -116,6 +114,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Jan 16 2012 Rex Dieter <rdieter@fedoraproject.org> 0.22-4
+- better rpath handling
+- revert locale change, move back to -libs
+
 * Mon Jan 16 2012 Rex Dieter <rdieter@fedoraproject.org> 0.22-3
 - move locale files to main pkg (from -libs)
 
