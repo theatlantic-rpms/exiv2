@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.22
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -94,7 +94,7 @@ test "$(pkg-config --modversion exiv2)" = "%{version}"
 rm -rf %{buildroot} 
 
 
-%files
+%files -f exiv2.lang
 %defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
@@ -103,7 +103,7 @@ rm -rf %{buildroot}
 %post libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
 
-%files libs -f exiv2.lang
+%files libs
 %defattr(-,root,root,-)
 %{_libdir}/libexiv2.so.11*
 
@@ -116,6 +116,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Jan 16 2012 Rex Dieter <rdieter@fedoraproject.org> 0.22-3
+- move locale files to main pkg (from -libs)
+
 * Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.22-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
