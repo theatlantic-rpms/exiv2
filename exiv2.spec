@@ -1,8 +1,8 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.22
-Release: 5%{?dist}
+Version: 0.23
+Release: 1%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -103,7 +103,7 @@ rm -rf %{buildroot}
 
 %files libs -f exiv2.lang
 %defattr(-,root,root,-)
-%{_libdir}/libexiv2.so.11*
+%{_libdir}/libexiv2.so.12*
 
 %files devel
 %defattr(-,root,root,-)
@@ -114,6 +114,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Apr 24 2012 Rex Dieter <rdieter@fedoraproject.org> 0.23-1
+- exiv2-0.23
+- abi bump
+
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.22-5
 - Rebuilt for c++ ABI breakage
 
