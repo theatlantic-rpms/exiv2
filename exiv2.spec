@@ -2,7 +2,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.23
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: GPLv2+
 Group:	 Applications/Multimedia
@@ -17,7 +17,7 @@ BuildRequires: gettext
 BuildRequires: pkgconfig
 BuildRequires: zlib-devel
 # docs
-#BuildRequires: doxygen graphviz libxslt
+BuildRequires: doxygen graphviz libxslt
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
@@ -54,8 +54,6 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
-mkdir doc/html
-
 
 %build
 %configure \
@@ -67,6 +65,7 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 make %{?_smp_mflags} 
 
+make doc
 
 %install
 rm -rf %{buildroot} 
@@ -86,6 +85,7 @@ chmod 755 %{buildroot}%{_libdir}/libexiv2.so.*
 %check
 export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
 test "$(pkg-config --modversion exiv2)" = "%{version}"
+test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %clean
@@ -107,6 +107,7 @@ rm -rf %{buildroot}
 
 %files devel
 %defattr(-,root,root,-)
+# last checked, this came in at ~39mb, consider some noarch -doc subpkg -- rex
 %doc doc/html
 %{_includedir}/exiv2/
 %{_libdir}/libexiv2.so
@@ -114,6 +115,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Aug 14 2012 Rex Dieter <rdieter@fedoraproject.org> 0.23-3
+- empty html doc dir (#848025)
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.23-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
