@@ -1,0 +1,29 @@
+diff -up exiv2-0.24/CMakeLists.txt.cmake_LIB_SUFFIX exiv2-0.24/CMakeLists.txt
+--- exiv2-0.24/CMakeLists.txt.cmake_LIB_SUFFIX	2013-09-23 05:58:43.000000000 -0500
++++ exiv2-0.24/CMakeLists.txt	2013-12-02 12:09:15.191761985 -0600
+@@ -123,8 +123,8 @@ INCLUDE( config/CMakeChecks.txt )
+ 
+ SET( INSTALL_TARGET_STANDARD_ARGS
+      RUNTIME DESTINATION bin
+-     LIBRARY DESTINATION lib
+-     ARCHIVE DESTINATION lib
++     LIBRARY DESTINATION lib${LIB_SUFFIX}
++     ARCHIVE DESTINATION lib${LIB_SUFFIX}
+ )
+ 
+ ##
+diff -up exiv2-0.24/config/CMakeChecks.txt.cmake_LIB_SUFFIX exiv2-0.24/config/CMakeChecks.txt
+--- exiv2-0.24/config/CMakeChecks.txt.cmake_LIB_SUFFIX	2013-07-23 19:34:42.000000000 -0500
++++ exiv2-0.24/config/CMakeChecks.txt	2013-12-02 12:10:55.277711848 -0600
+@@ -251,9 +251,9 @@ ADD_CUSTOM_TARGET(uninstall "${CMAKE_COM
+ 
+ IF( NOT MSVC )
+     CONFIGURE_FILE( config/exiv2.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/exiv2.pc @ONLY )
+-    INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/exiv2.pc DESTINATION lib/pkgconfig )
++    INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/exiv2.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig )
+     CONFIGURE_FILE( config/exiv2.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/exiv2.lsm)
+-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/exiv2.lsm DESTINATION lib/pkgconfig )
++    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/exiv2.lsm DESTINATION lib${LIB_SUFFIX}/pkgconfig )
+ ENDIF( NOT MSVC )
+ 
+ # ******************************************************************************

@@ -1,17 +1,27 @@
 
+## enable experimental cmake build support (or not)
+## still lacks some features, like visibility
+#define cmake_build 1
+
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.23
-Release: 5%{?dist}
+Version: 0.24
+Release: 1%{?dist}
 
 License: GPLv2+
-Group:	 Applications/Multimedia
 URL: 	 http://www.exiv2.org/
 Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 ## upstream patches
 
+## upstreamable patches
+Patch50: exiv2-0.24-cmake_LIB_SUFFIX.patch
+Patch51: exiv2-0.24-cmake_mandir.patch
+Patch52: exiv2-0.24-doxygen_config.patch
+
+%if 0%{?cmake_build}
+BuildRequires: cmake
+%endif
 BuildRequires: expat-devel
 BuildRequires: gettext
 BuildRequires: pkgconfig
@@ -20,7 +30,6 @@ BuildRequires: zlib-devel
 BuildRequires: doxygen graphviz libxslt
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 
 %description
 A command line utility to access image metadata, allowing one to:
@@ -36,26 +45,45 @@ A command line utility to access image metadata, allowing one to:
 
 %package devel
 Summary: Header files, libraries and development documentation for %{name}
-Group:	 Development/Libraries
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-Requires: pkgconfig
 %description devel
 %{summary}.
 
 %package libs
 Summary: Exif and Iptc metadata manipulation library
-Group: System Environment/Libraries
 %description libs
 A C++ library to access image metadata, supporting full read and write access
 to the Exif and Iptc metadata, Exif MakerNote support, extract and delete 
 methods for Exif thumbnails, classes to access Ifd and so on.
 
+%package doc
+Summary: Api documentation for %{name}
+BuildArch: noarch
+%description doc
+%{summary}.
+
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
+%patch50 -p1 -b .cmake_LIB_SUFFIX
+%patch51 -p1 -b .cmake_mandir
+%patch52 -p1 -b .doxygen_config
+
 
 %build
+%if 0%{?cmake_build}
+mkdir -p %{_target_platform}
+pushd %{_target_platform}
+%{cmake} \
+  -DEXIV2_ENABLE_BUILD_PO:BOOL=ON \
+  -DEXIV2_ENABLE_BUILD_SAMPLES:BOOL=OFF \
+  ..
+
+make %{?_smp_mflags}
+make doc -k ||:
+popd
+%else
 %configure \
   --disable-rpath \
   --disable-static 
@@ -63,37 +91,36 @@ methods for Exif thumbnails, classes to access Ifd and so on.
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
+make doc -k ||:
+%endif
 
-make doc
 
 %install
-rm -rf %{buildroot} 
-
+%if 0%{?cmake_build}
+make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
+%else
 make install DESTDIR=%{buildroot}
-
-%find_lang exiv2
-
-## Unpackaged files
-rm -fv %{buildroot}%{_libdir}/libexiv2.la
 
 ## fix perms on installed lib
 ls -l     %{buildroot}%{_libdir}/libexiv2.so.*
 chmod 755 %{buildroot}%{_libdir}/libexiv2.so.*
+%endif
+
+%find_lang exiv2
+
+## unpackaged files
+rm -fv %{buildroot}%{_libdir}/pkgconfig/exiv2.lsm
+rm -fv %{buildroot}%{_libdir}/libexiv2.la
 
 
 %check
-export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
+export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
 test "$(pkg-config --modversion exiv2)" = "%{version}"
 test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
-%clean
-rm -rf %{buildroot} 
-
-
 %files 
-%defattr(-,root,root,-)
 %doc COPYING README
 %{_bindir}/exiv2
 %{_mandir}/man1/*
@@ -102,19 +129,23 @@ rm -rf %{buildroot}
 %postun libs -p /sbin/ldconfig
 
 %files libs -f exiv2.lang
-%defattr(-,root,root,-)
-%{_libdir}/libexiv2.so.12*
+%{_libdir}/libexiv2.so.13*
 
 %files devel
-%defattr(-,root,root,-)
-# last checked, this came in at ~39mb, consider some noarch -doc subpkg -- rex
-%doc doc/html
 %{_includedir}/exiv2/
 %{_libdir}/libexiv2.so
 %{_libdir}/pkgconfig/exiv2.pc
 
+%files doc
+%doc doc/html
+
 
 %changelog
+* Mon Dec 02 2013 Rex Dieter <rdieter@fedoraproject.org> - 0.24-1
+- exiv2-0.24, abi bump
+- -doc subpkg
+- ready experimental cmake buildsystem support
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.23-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
