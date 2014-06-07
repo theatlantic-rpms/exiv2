@@ -6,7 +6,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.24
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPLv2+
 URL: 	 http://www.exiv2.org/
@@ -141,6 +141,9 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.24-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Mon Dec 02 2013 Rex Dieter <rdieter@fedoraproject.org> - 0.24-1
 - exiv2-0.24, abi bump
 - -doc subpkg
