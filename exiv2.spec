@@ -6,13 +6,18 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.24
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: GPLv2+
 URL: 	 http://www.exiv2.org/
 Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
 
 ## upstream patches
+# CVE-2014-9449 exiv2: buffer overflow in RiffVideo::infoTagsHandler
+# https://bugzilla.redhat.com/show_bug.cgi?id=1178908
+# http://dev.exiv2.org/issues/960
+# commit: http://dev.exiv2.org/projects/exiv2/repository/diff?rev=3264&rev_to=3263
+Patch100: exiv2-0.24-CVE-2014-9449.patch
 
 ## upstreamable patches
 Patch50: exiv2-0.24-cmake_LIB_SUFFIX.patch
@@ -65,6 +70,8 @@ BuildArch: noarch
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
+
+%patch100 -p1 -b .CVE-2014-9449
 
 %patch50 -p1 -b .cmake_LIB_SUFFIX
 %patch51 -p1 -b .cmake_mandir
@@ -141,6 +148,9 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
+* Mon Jan 05 2015 Rex Dieter <rdieter@fedoraproject.org> 0.24-4
+- CVE-2014-9449 exiv2: buffer overflow in RiffVideo::infoTagsHandler (#1178909)
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.24-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
