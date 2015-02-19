@@ -6,7 +6,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.24
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: GPLv2+
 URL: 	 http://www.exiv2.org/
@@ -148,6 +148,9 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
+* Thu Feb 19 2015 Rex Dieter <rdieter@fedoraproject.org> 0.24-5
+- rebuild (gcc5)
+
 * Mon Jan 05 2015 Rex Dieter <rdieter@fedoraproject.org> 0.24-4
 - CVE-2014-9449 exiv2: buffer overflow in RiffVideo::infoTagsHandler (#1178909)
 
