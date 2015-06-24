@@ -5,22 +5,18 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.24
-Release: 7%{?dist}
+Version: 0.25
+Release: 1%{?dist}
 
 License: GPLv2+
 URL: 	 http://www.exiv2.org/
 Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
 
 ## upstream patches
-# CVE-2014-9449 exiv2: buffer overflow in RiffVideo::infoTagsHandler
-# https://bugzilla.redhat.com/show_bug.cgi?id=1178908
-# http://dev.exiv2.org/issues/960
-# commit: http://dev.exiv2.org/projects/exiv2/repository/diff?rev=3264&rev_to=3263
-Patch100: exiv2-0.24-CVE-2014-9449.patch
 
 ## upstreamable patches
-Patch50: exiv2-0.24-cmake_LIB_SUFFIX.patch
+# support LIB_SUFFIX, and avoid hard-coded rpath while we're at it
+Patch50: exiv2-0.25-cmake_LIB_SUFFIX.patch
 Patch51: exiv2-0.24-cmake_mandir.patch
 Patch52: exiv2-0.24-doxygen_config.patch
 
@@ -70,8 +66,6 @@ BuildArch: noarch
 
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
-
-%patch100 -p1 -b .CVE-2014-9449
 
 %patch50 -p1 -b .cmake_LIB_SUFFIX
 %patch51 -p1 -b .cmake_mandir
@@ -136,7 +130,7 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 %postun libs -p /sbin/ldconfig
 
 %files libs -f exiv2.lang
-%{_libdir}/libexiv2.so.13*
+%{_libdir}/libexiv2.so.14*
 
 %files devel
 %{_includedir}/exiv2/
@@ -148,6 +142,9 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
+* Mon Jun 22 2015 Rex Dieter <rdieter@fedoraproject.org> 0.25-1
+- exiv2-0.25 (#1234185)
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.24-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
