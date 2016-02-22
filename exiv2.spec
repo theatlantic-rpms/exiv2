@@ -6,7 +6,7 @@
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
 Version: 0.25
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: GPLv2+
 URL: 	 http://www.exiv2.org/
@@ -73,6 +73,11 @@ BuildArch: noarch
 
 
 %build
+
+# exiv2: embedded copy of exempi should be compiled with BanAllEntityUsage
+# https://bugzilla.redhat.com/show_bug.cgi?id=888769
+export CPPFLAGS="-DBanAllEntityUsage=1"
+
 %if 0%{?cmake_build}
 mkdir -p %{_target_platform}
 pushd %{_target_platform}
@@ -142,6 +147,9 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
+* Mon Feb 22 2016 Rex Dieter <rdieter@fedoraproject.org> 0.25-3
+- embedded copy of exempi should be compiled with BanAllEntityUsage (#888769)
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.25-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
