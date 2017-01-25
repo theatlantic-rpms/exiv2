@@ -5,8 +5,8 @@
 
 Summary: Exif and Iptc metadata manipulation library
 Name:	 exiv2
-Version: 0.25
-Release: 3%{?dist}
+Version: 0.26
+Release: 1%{?dist}
 
 License: GPLv2+
 URL: 	 http://www.exiv2.org/
@@ -16,8 +16,6 @@ Source0: http://www.exiv2.org/exiv2-%{version}%{?pre:-%{pre}}.tar.gz
 
 ## upstreamable patches
 # support LIB_SUFFIX, and avoid hard-coded rpath while we're at it
-Patch50: exiv2-0.25-cmake_LIB_SUFFIX.patch
-Patch51: exiv2-0.24-cmake_mandir.patch
 Patch52: exiv2-0.24-doxygen_config.patch
 
 %if 0%{?cmake_build}
@@ -67,8 +65,6 @@ BuildArch: noarch
 %prep
 %setup -q -n %{name}-%{version}%{?pre:-%{pre}}
 
-%patch50 -p1 -b .cmake_LIB_SUFFIX
-%patch51 -p1 -b .cmake_mandir
 %patch52 -p1 -b .doxygen_config
 
 
@@ -147,6 +143,9 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
+* Wed Jan 25 2017 Frankie Dintino <fdintino@theatlantic.com> 0.26-1
+- exiv2-0.26
+
 * Mon Feb 22 2016 Rex Dieter <rdieter@fedoraproject.org> 0.25-3
 - embedded copy of exempi should be compiled with BanAllEntityUsage (#888769)
 
